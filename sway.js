@@ -3,11 +3,9 @@
 /* Note: Sway relies on Velocity.js, a copy can be found on VelocityJS.org */
 var callCount = 0;
 
-var sway = function(message, animation)
+var sway = function(animation)
 {
 	var velocity_param;
-	var notCalled = 1;
-	callCount++;
 	
 	// var fns = ['opacity', 'width', 'height', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft', 'top', 'right', 'bottom', 'left', 'marginTop', 'marginRight', 'marginBottom', 'marginLeft', 'borderTopWidth', 'borderRightWidth', 'borderBottomWidth', 'borderLeftWidth', 'borderRadius', 'outerWidth', 'fontSize', 'lineHeight', 'letterSpacing', 'wordSpacing', 'color', 'colorRed', 'colorGreen', 'colorBlue', 'colorAlpha', 'backgroundColor', 'backgroundColorRed', 'backgroundColorBlue', 'backgroundColorGreen', 'backgroundColorAlpha', 'borderColor', 'borderColorRed', 'borderColorGreen', 'borderColorBlue', 'borderColorAlpha', 'outlineColor', 'outlineColorRed', 'outlineColorGreen', 'outlineColorBlue', 'outlineColorAlpha', 'textShadowX', 'textShadowY', 'textShadowBlur', 'boxShadowX', 'boxShadowY', 'boxShadowBlur', 'boxShadowSpread', 'translateX', 'translateY', 'translateZ', 'scale', 'scaleX', 'scaleY', 'rotateX', 'rotateY', 'rotateZ', 'skewX', 'skewY'];
 
@@ -18,9 +16,11 @@ var sway = function(message, animation)
 	
 	$('.sway').each(function(i, obj)
 	{
-		if ($(this).is(':empty') && notCalled)
+		if (callCount <= i)
 		{
+			var message = $(this).text();
 			notCalled = 0;
+			$(this).html(''); // clear the html
 			
 			while (message != '')
 			{
@@ -73,12 +73,13 @@ var sway = function(message, animation)
 				}, 
 				function()
 				{
-				
 				});
 			});
 			$('.inner-sway' + callCount).css({'display':'inline-block'});
 		}
+		
 		if (notCalled && i == $('.sway').length - 1)
 			console.log("Sway: Function was called more than number of available .sway divs")
 	});
+	callCount++;
 }
