@@ -1,26 +1,34 @@
 /* Sway (c) 2016 Benson Pan. MIT @license: en.wikipedia.org/wiki/MIT_License */
 
 /* Note: Sway relies on JQuery and Velocity.js; a copy can be found on VelocityJS.org */
-var callCount = 0;
 
-var sway = function(animation)
-{
-	var velocity_param;
-	
-	// var fns = ['opacity', 'width', 'height', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft', 'top', 'right', 'bottom', 'left', 'marginTop', 'marginRight', 'marginBottom', 'marginLeft', 'borderTopWidth', 'borderRightWidth', 'borderBottomWidth', 'borderLeftWidth', 'borderRadius', 'outerWidth', 'fontSize', 'lineHeight', 'letterSpacing', 'wordSpacing', 'color', 'colorRed', 'colorGreen', 'colorBlue', 'colorAlpha', 'backgroundColor', 'backgroundColorRed', 'backgroundColorBlue', 'backgroundColorGreen', 'backgroundColorAlpha', 'borderColor', 'borderColorRed', 'borderColorGreen', 'borderColorBlue', 'borderColorAlpha', 'outlineColor', 'outlineColorRed', 'outlineColorGreen', 'outlineColorBlue', 'outlineColorAlpha', 'textShadowX', 'textShadowY', 'textShadowBlur', 'boxShadowX', 'boxShadowY', 'boxShadowBlur', 'boxShadowSpread', 'translateX', 'translateY', 'translateZ', 'scale', 'scaleX', 'scaleY', 'rotateX', 'rotateY', 'rotateZ', 'skewX', 'skewY'];
+(function ( $ ) {
+	var callCount = 0;
+	$.fn.sway = function(animation)
+	{
+		function rgb2hex(rgb) {
+			if (/^#[0-9A-F]{6}$/i.test(rgb)) return rgb;
 
-	for (var key in animation)
-	{
-		velocity_param = key;
-	}
+			rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+			function hex(x) {
+				return ("0" + parseInt(x).toString(16)).slice(-2);
+			}
+			return "#" + hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
+		}
 	
-	$('.sway').each(function(i, obj)
-	{
-		if (callCount == i)
+		var velocity_param;
+		var message;
+
+		for (var key in animation)
 		{
-			var message = $(this).text();
-			notCalled = 0;
-			$(this).html(''); // clear the html
+			velocity_param = key;
+		}
+		
+		this.each(function(i, obj)
+		{
+			message = $(this).text();
+			$(this).html('');
+			callCount++;
 			
 			while (message != '')
 			{
@@ -46,12 +54,13 @@ var sway = function(animation)
 					message = '';
 				}
 			}
+			
 			$('.inner-sway' + callCount).each(function(i, obj)
 			{
 				var temp = {};
 				var ending = {};
 				temp[velocity_param] = parseInt(animation[velocity_param]) * -1;
-				
+			
 				
 				if ("scale".indexOf(velocity_param) != -1)
 				{
@@ -86,23 +95,10 @@ var sway = function(animation)
 					{
 					});
 				}	
-				
+			
 			});
 			$('.inner-sway' + callCount).css({'display':'inline-block'});
-		}
 		
-		if (notCalled && i == $('.sway').length - 1)
-			console.log("Sway: Function was called more than number of available .sway divs")
-	});
-	callCount++;
-}
-
-function rgb2hex(rgb) {
-    if (/^#[0-9A-F]{6}$/i.test(rgb)) return rgb;
-
-    rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
-    function hex(x) {
-        return ("0" + parseInt(x).toString(16)).slice(-2);
-    }
-    return "#" + hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
-}
+		});
+	}
+}(jQuery));
