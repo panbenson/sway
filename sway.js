@@ -35,7 +35,7 @@
 				var indexSpace1 = message.indexOf(' ');
 				if (indexSpace1 != -1)
 				{
-					if (message.indexOf('<br>') == 0)
+					if (message.indexOf('/n') == 0)
 					{
 						$(this).append('<br>');
 						message = message.substring(indexSpace1 + 1);
